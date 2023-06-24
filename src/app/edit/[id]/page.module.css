@@ -1,0 +1,71 @@
+.set{
+    display: flex;
+    flex-direction: row;
+   
+  margin-left: 30%;
+    gap: 20px;
+    align-content: center;
+    font-size: 19px;
+    font-weight: bold;
+    
+  }
+  
+  .del{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+  }
+  
+  .options{
+   display: flex;
+   flex-direction: row;
+  gap: 20px;
+   
+  }
+  .to{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
+  
+  .mar{
+    font-size: 18px;
+    font-weight: 400;
+  }
+  
+  .tasks{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+    align-content: space-between;
+  }
+  
+  .todos{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-left: 1px;
+    margin-right: 32px;
+  }
+  
+  .sh{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
+  .but{
+    border: none;
+    background-color: rgb(0, 0, 0);
+    color: white;
+    padding: 8px;
+    border-radius: 25px;
+  }
+  .but:hover{
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+  transition-duration: 0.2s;
+  }

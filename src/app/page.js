@@ -1,95 +1,124 @@
 import Image from 'next/image'
 import styles from './page.module.css'
+import dbConnect from './utils/dbConnect'
+import Todo from './models/Todo';
+import { redirect } from 'next/navigation';
+import Link from 'next/link';
 
-export default function Home() {
+export default async function Home() {
+
+
+
+//function to save data
+dbConnect();
+const todos = await Todo.find().sort({createdAt:-1});
+
+
+
+
+
+async function newData(data){
+  "use server"
+
+ 
+  let title = data.get("title")?.valueOf();
+  let todo = data.get("todo")?.valueOf();
+  try {
+    dbConnect();
+    let newTodo = new Todo({title,todo});
+    await newTodo.save()
+
+    console.log(newTodo)
+
+    
+    
+  } catch (error) {
+    console.error(error)
+  }
+  redirect('/')
+}
+
+
+
+
+
+
+
+
+
+
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+      <form action={newData} >
+     
+     <hr />
+<br />
+     <marquee width="100%" direction="left" height="40px" className={styles.mar} >
+This is an Todo App. Helps you to be productive in your way.
+</marquee>
+     <br />
+     <div className={styles.set} >
+     <label htmlFor='title' >Title</label>
+     <input type='text' name='title' />
+    
+     <br />
+    
+     <label htmlFor='todo' >Todo</label>
+     <input type='text' name='todo' />
+     <button type='submit' className={styles.but}  >Submit</button>
+     </div>
+     </form>
+     <br />
+     
+     <hr />
+     <br />
+<div className={styles.todos} >
+  <h2>Todos</h2>
+</div>
+<br />
+<div className={styles.sh} >
+<h3>Title</h3>
+<h3>Todo</h3>
+<h3>Options</h3>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+</div>
+<br />
+<hr />
+<br />
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
+<div className={styles.tasks} >
+{
+todos.map((todo)=>{
+  return(
+   <>
+   <div key={todo._id}  className={styles.to} >
+    <h4>{todo.title}</h4>
+    <h4>{todo.todo}</h4>
+    <div className={styles.options} >
+      <div className={styles.del} >
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+        <Link  href={`/delete/${todo._id}`}   >
+    <button className={styles.but}  >Delete</button>
+    </Link>
+    </div>
+<Link href={`/edit/${todo._id}`} >
+
+    <button className={styles.but} >Edit</button>
+</Link>
+    </div>
+
+
+   </div>
+   
+   </>
+  )
+})
+}
+
+
+</div>
     </main>
   )
 }
